@@ -11,6 +11,10 @@ public:
 	static void SemiColonNotFound();
 	static void DefineInsideScope();
 	static void AssignmentEqualNotFound();
+	static void AssignmentSidesNotEqual();
+	static void VariableNameNotFound();
+	static void BooleanValueExpected();
+	static void NumberVariableExpected();
 
 
 };
