@@ -15,10 +15,10 @@ class Token {
 			ident,          // identifier like a, b, c, d, etc.
             number,         // number like 1, 2, 3, 4, etc.
 			comma,          // ,
-            plus,           // +
-			minus,          // -
 			unery_plus,     // ++
             unery_minus,    // --
+            plus,           // +
+			minus,          // -
 			star,           // *
 			slash,          // /
 			power,          // ^
@@ -41,9 +41,11 @@ class Token {
 			KW_int,         // int
 			KW_bool,        // bool
             KW_print,       // print
-            KW_if,          // if			
+            KW_if,          // if
 			KW_elseif,      // else if
 			KW_else,        // else
+			KW_for,         // for
+            KW_while,       // while
 			KW_and,         // and
 			KW_or,          // or
 			KW_true,        // true
@@ -86,11 +88,13 @@ public:
 		BufferStart = Buffer.begin();
 		BufferPtr = BufferStart;
 	}
+
 	void next(Token& token);                       // gets next token
+	void setBufferPtr(const char* buffer);
+	const char* getBufferPtr(){return BufferPtr;};
 
 private:
 	void formToken(Token& Result, const char* TokEnd,
 		Token::TokenKind Kind);
 };
-
 #endif
