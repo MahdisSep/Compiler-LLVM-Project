@@ -390,6 +390,78 @@ Expression* Parser::parseFactor()
 }
 
 
+
+/*
+	parse assignment like a = 3;
+*/
+AssignStatement* Parser::parseAssignInt() 
+{
+	Expression* value;
+	Expression* Res;
+	
+	Res = new Expression(Tok.getText()); 
+	Res2 = Tok.getText();
+	advance();  // pass Id
+
+	if (Tok.is(Token::unery_minus))
+	{
+		advance();
+		value = new UneryOp(UneryOp::Minus, Res2);
+	}
+	else if (Tok.is(Token::unery_plus))
+	{
+		advance();
+		value = new UneryOp(UneryOp::Plus, Res2);
+	}
+	else if (Tok.is(Token::minus_equal))
+	{
+		advance();
+		value = parseExpr();
+		value = new BinaryOp(BinaryOp::Minus, Res, value);
+	}
+	else if (Tok.is(Token::plus_equal))
+	{
+		advance();
+		value = parseExpr();
+		value = new BinaryOp(BinaryOp::Plus, Res, value);
+	}
+	else if (Tok.is(Token::star_equal))
+	{
+		advance();
+		value = parseExpr();
+		value = new BinaryOp(BinaryOp::Mul, Res, value);
+	}
+	else if (Tok.is(Token::slash_equal))
+	{
+		advance();
+		value = parseExpr();
+		value = new BinaryOp(BinaryOp::Div, Res, value);
+	}
+	else if (Tok.is(Token::mod_equal))
+	{
+		advance();
+		value = parseExpr();
+		value = new BinaryOp(BinaryOp::Mod, Res, value);
+	}
+	else if (Tok.is(Token::equal))
+	{
+		advance(); // pass equal
+		value = parseExpr();
+	}
+	else
+	{
+		Error::AssignmentEqualNotFound();
+	}
+
+	if (!Tok.is(Token::semi_colon))
+	{
+		Error::SemiColonNotFound();
+	}
+
+	advance(); // pass semicolon
+	return new AssignStatement(Res, value);  
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
