@@ -263,6 +263,21 @@ Expression* Parser::parseExpr()
 	return Left;
 }
 
+/*
+	parses the term
+*/
+Expression* Parser::parseTerm()
+{
+	Expression* Left = parsePower();
+	while (Tok.isOneOf(Token::star, Token::slash, Token::mod))
+	{
+		BinaryOp::Operator Op = Tok.is(Token::star) ? BinaryOp::Mul : Tok.is(Token::slash) ? BinaryOp::Div : BinaryOp::Mod;
+		advance();
+		Expression* Right = parsePower();
+		Left = new BinaryOp(Op, Left, Right);
+	}
+	return Left;
+}
 
 
 Base* Parser::parse()
