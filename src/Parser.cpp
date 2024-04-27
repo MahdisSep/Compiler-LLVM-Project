@@ -487,6 +487,47 @@ AssignStatement* Parser::parseAssignBool()
 	return new AssignStatement(Res, value);  
 }
 
+
+WhileStatement* Parser::parseWhile()  
+{
+	advance(); // pass while
+
+	if (!Tok.is(Token::l_paren))         
+	{
+		Error::LeftParenthesisExpected();
+	}
+	advance();
+	
+	Expression* condition = parseCondition();
+
+	if (!Tok.is(Token::r_paren))
+	{
+		Error::RightParenthesisExpected();
+	}
+	advance();
+
+	if (Tok.is(Token::KW_begin))
+	{
+		advance();
+
+		Base* AllStates = parseStatement();
+
+		if (!consume(Token::KW_end))
+		{
+
+			return new WhileStatement(condition, AllStates->getStatements(), Statement::StateMentType::While);  
+		}
+		else
+		{
+			Error::EndNotSeenForIf();
+		}
+	}
+	else
+	{
+		Error::BeginExpectedAfterColon();  
+	}
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();

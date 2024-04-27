@@ -15,7 +15,13 @@ public:
 	static void VariableNameNotFound();
 	static void BooleanValueExpected();
 	static void NumberVariableExpected();
-
+	static void EndNotSeenForIf();
+	static void BeginExpectedAfterColon();
+	static void EndCommentExpected();
+	static void LeftParenthesisExpected();
+	static void RightParenthesisExpected();
+	static void OnlyIdentifierCanBePrinted();
+	static void UnexpectedTokenAfterMinusOrPlus();
 
 };
 
