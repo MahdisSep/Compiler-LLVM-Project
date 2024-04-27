@@ -608,6 +608,10 @@ Expression* Parser::parseCondition()
 		Expression* rcondition = parseCondition();
 		return new Expression(new BooleanOp(BooleanOp::Or, lcondition, rcondition));
 	}
+	else
+	{
+		return lcondition;
+	}
 
 }
 
