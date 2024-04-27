@@ -77,5 +77,20 @@ public:
 	}
 };
 
+class Lexer {
+	const char* BufferStart;
+	const char* BufferPtr;
+
+public:
+	Lexer(const llvm::StringRef& Buffer) {    // constructor scans the whole context
+		BufferStart = Buffer.begin();
+		BufferPtr = BufferStart;
+	}
+	void next(Token& token);                       // gets next token
+
+private:
+	void formToken(Token& Result, const char* TokEnd,
+		Token::TokenKind Kind);
+};
 
 #endif
