@@ -104,6 +104,79 @@ Base* Parser::parseS()
 }
 
 
+/*
+	parses declaration statements like int a, b, c;
+*/
+llvm::SmallVector<DecStatement*> Parser::parseDefineInt()  
+{
+	llvm::SmallVector<DecStatement*> assignments;
+	llvm::SmallVector<Expression*> variables;
+	llvm::SmallVector<Expression*> values;
+
+	advance();  // pass "int"
+
+	if (!Tok.is(Token::ident))
+	{
+		Error::VariableNameNotFound();
+	}
+	Expression* lhand = new Expression(Tok.getText());
+	variables.push_back(lhand);
+	advance(); // pass id
+
+	if(Tok.is(Token::equal)){
+		advance(); // pass "="
+		Expression* rhand = parseExpr();
+		values.push_back(rhand);
+	}
+	else{
+		Expression* rhand = new Expression(0);  // default init
+		values.push_back(rhand);
+	}
+
+	bool SeenTokenVariable = true;
+	while (SeenTokenVariable){
+
+		if (Tok.is(Token::comma)){
+			
+			advance(); pass ","
+			if (!Tok.is(Token::ident)){
+				Error::VariableNameNotFound();
+			}
+			Expression* lhand = new Expression(Tok.getText());
+			variables.push_back(lhand);
+			advance(); // pass id
+
+			if (Tok.is(Token::equal)){
+				advance(); // pass "="
+				Expression* rhand = parseExpr();
+				values.push_back(rhand);
+			}
+			else {
+				Expression* rhand = new Expression(0);  // default init
+				values.push_back(rhand);
+			}
+
+		}
+		else if (Tok.is(Token::semi_colon)){
+			SeenTokenVariable = false;
+		}
+
+	}
+
+	while (variables.size() != 0)
+	{
+		assignments.push_back(new DecStatement(variables.front(), values.front()));
+		variables.erase(variables.begin());
+		values.erase(values.begin());
+	}
+
+	advance(); // pass ";"
+	return assignments;
+}
+
+
+
+
 
 Base* Parser::parse()
 {
