@@ -610,6 +610,85 @@ Expression* Parser::parseCondition()
 }
 
 
+/*
+	parses a single subcondition like 3 > 5+1
+	it does not deal with and, or
+*/
+Expression* Parser::parseSubCondition()        
+{
+	if (Tok.is(Token::l_paren))
+	{
+		advance();
+		Expression* expressionInside = parseCondition();
+		if (!consume(Token::r_paren))
+		{
+			return expressionInside;
+		}
+		else
+		{
+			cout<< "Right Parenthesis Expected";
+			return nullptr;
+		}
+	}
+	else if (Tok.is(Token::KW_true))
+	{
+		advance();
+		return new Expression(true);
+	}
+	else if (Tok.is(Token::KW_false))
+	{
+		advance();
+		return new Expression(false);
+	}
+	else if (Tok.is(Token::ident))
+	{
+		Expression* Res = new Expression(Tok.getText());
+		advance();
+		return Res;
+	}
+	else
+	{
+		Expression* lhand = parseExpr();
+		BooleanOp::Operator Op;
+
+		if (Tok.is(Token::less))
+		{
+			Op = BooleanOp::Less;
+		}
+		else if (Tok.is(Token::less_equal))
+		{
+			Op = BooleanOp::LessEqual;
+		}
+		else if (Tok.is(Token::greater))
+		{
+			Op = BooleanOp::Greater;
+		}
+		else if (Tok.is(Token::greater_equal))
+		{
+			Op = BooleanOp::GreaterEqual;
+		}
+		else if (Tok.is(Token::equal_equal))
+		{
+			Op = BooleanOp::Equal;
+		}
+		else if (Tok.is(Token::not_equal))
+		{
+			Op = BooleanOp::NotEqual;
+		}
+		else
+		{
+			cout<< "Boolean Value Expected";
+			return nullptr;
+		}
+
+		advance();
+		Expression* rhand = parseExpr();
+		return new BooleanOp(Op, lhand, rhand);
+
+	}
+}
+
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
