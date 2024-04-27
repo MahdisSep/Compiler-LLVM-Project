@@ -292,6 +292,45 @@ Expression* Parser::parsePower()
 	return Left;
 }
 
+
+/*
+	parses factor
+*/
+Expression* Parser::parseFactor()
+{
+	Expression* Res = nullptr;
+	switch (Tok.getKind())
+	{
+	case Token::number:
+	{
+		int number;
+		Tok.getText().getAsInteger(10, number);
+		Res = new Expression(number);
+		advance();
+		break;
+	}
+	case Token::ident:
+	{
+		Res = new Expression(Tok.getText());
+		advance();
+		break;
+	}
+	case Token::l_paren:
+	{
+		advance();
+		Res = parseExpr();
+		if (!consume(Token::r_paren))
+			break;
+	}
+	default: // error handling
+	{
+		Error::NumberVariableExpected();
+	}
+
+	}
+	return Res;
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
