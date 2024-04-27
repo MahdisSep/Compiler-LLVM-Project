@@ -279,6 +279,18 @@ Expression* Parser::parseTerm()
 	return Left;
 }
 
+Expression* Parser::parsePower()
+{
+	Expression* Left = parseFactor();
+	while (Tok.is(Token::power))
+	{
+		BinaryOp::Operator Op = BinaryOp::Pow;
+		advance();
+		Expression* Right = parseFactor();
+		Left = new BinaryOp(Op, Left, Right);
+	}
+	return Left;
+}
 
 Base* Parser::parse()
 {
