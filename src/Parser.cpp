@@ -462,6 +462,31 @@ AssignStatement* Parser::parseAssignInt()
 	return new AssignStatement(Res, value);  
 }
 
+
+AssignStatement* Parser::parseAssignBool()  
+{
+	Expression* Res = new Expression(Tok.getText());
+	advance();  // pass Id
+
+	if (!Tok.is(Token::equal))
+	{
+		cout<< "Assignment Equal Not Found";
+		return nullptr;
+	}
+	advance();  // pass "="
+
+	Expression* value = parseCondition();
+
+	if (!Tok.is(Token::semi_colon))
+	{
+		cout<< "Semi colon Not Found";
+		return nullptr;
+	}
+
+	advance(); // pass semicolon
+	return new AssignStatement(Res, value);  
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
