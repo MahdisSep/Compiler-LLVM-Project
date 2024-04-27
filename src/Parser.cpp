@@ -247,6 +247,22 @@ llvm::SmallVector<DecStatement*> Parser::parseDefineBool()
 }
 
 
+/*
+	parses the expression
+*/
+Expression* Parser::parseExpr()
+{
+	Expression* Left = parseTerm();
+	while (Tok.isOneOf(Token::plus, Token::minus))
+	{
+		BinaryOp::Operator Op = Tok.is(Token::plus) ? BinaryOp::Plus : BinaryOp::Minus;
+		advance();
+		Expression* Right = parseTerm();
+		Left = new BinaryOp(Op, Left, Right);
+	}
+	return Left;
+}
+
 
 
 Base* Parser::parse()
