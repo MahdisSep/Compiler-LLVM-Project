@@ -598,11 +598,13 @@ Expression* Parser::parseCondition()
 	lcondition = parseSubCondition();
 	if (Tok.is(Token::KW_and))
 	{
+		advance();
 		Expression* rcondition = parseCondition();
 		return new Expression(new BooleanOp(BooleanOp::And, lcondition, rcondition));
 	}
 	else if (Tok.is(Token::KW_or))
 	{
+		advance();
 		Expression* rcondition = parseCondition();
 		return new Expression(new BooleanOp(BooleanOp::Or, lcondition, rcondition));
 	}
