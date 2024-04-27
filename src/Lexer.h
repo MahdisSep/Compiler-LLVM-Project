@@ -17,6 +17,8 @@ class Token {
 			comma,          // ,
             plus,           // +
 			minus,          // -
+			unery_plus,     // ++
+            unery_minus,    // --
 			star,           // *
 			slash,          // /
 			power,          // ^
