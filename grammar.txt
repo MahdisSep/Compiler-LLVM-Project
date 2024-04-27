@@ -1,0 +1,52 @@
+S -> DefineInt S | DefineBool S | Assign S | Unary S | If S | For S | While S | Comment S | Print S | DefineInt | DefineBool | Assign | Unary | If | For | While |Comment | Print
+
+DefineInt -> "int" Id EndDefInt | "int" Id "=" Expr EndDefInt 
+EndDefInt -> ";" | "," Id "=" Expr EndDefInt | "," Id EndDefInt
+    
+DefineBool -> "bool" Id EndDefBool | "bool" Id "=" Condition EndDefBool
+EndDefBool -> ";" | "," Id "=" Condition EndDefBool | "," Id EndDefBool
+
+AssignOp -> "+=" | "-=" | "*=" | "/=" | "=" | "%="
+
+AssignInt ->  Id AssignOp Expr ";"
+AssignBool -> Id "=" Condition ";"
+
+Expr -> Expr "+" Term |
+        Expr "-" Term | Term
+
+Term -> Term "*" Power |
+        Term "/" Power | Power
+
+Power -> Power "^" Factor | Factor
+
+Factor -> Id | "-" "(" Id ")" | "+" "(" Id ")" | Number | "-" Number | "+" Number | "(" Expr ")" | "+" "(" Expr ")" | "-" "(" Expr ")"  
+
+Unary -> Id "++" ";" | Id "--" ";"
+
+Print -> "Print" "(" Id ")" ";"
+
+Comment -> "/*" CommentContent "*/"
+
+If -> "if" "(" Condition ")" "{" Statement "}" Elif Else |
+      "if" "(" Condition ")" "{" Statement "}" Else |
+      "if" "(" Condition ")" "{" Statement "}" Elif |
+      "if" "(" Condition ")" "{" Statement "}" |
+
+Elif -> "else if" "(" Condition ")" "{" Statement "}" Elif |
+    "else if" "(" Condition ")" "{" Statement "}"
+
+
+Else -> "else" "{" Statement "}" 
+
+Statement -> Assign Statement | If Statement | For Statement | While Statement | Assign | If | For | While
+
+Condition -> Condition "and" SubCondition |
+       Condition "or" SubCondition | SubCondition
+
+SubCondition -> "True" | "False" | Expr Relational Expr | "(" Condition ")" | Id
+
+Relational -> ">" | "<" | ">=" | "<=" | "==" | "!="
+
+While -> "While" "(" Condition ")" "{" Statement "}"
+
+For -> "For" "(" Assign ";" Condition ";" Assign ")" "{" Statement "}"
