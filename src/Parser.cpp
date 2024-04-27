@@ -528,6 +528,65 @@ WhileStatement* Parser::parseWhile()
 	}
 }
 
+// for parser
+
+ForStatement* Parser::parseFor()  
+{
+	advance();	// pass for
+
+	if (!Tok.is(Token::l_paren))        
+	{
+		Error::LeftParenthesisExpected();
+	}
+	advance();
+
+	AssignStatement* assign1 = parseAssignInt();  // check class type
+
+	if (!Tok.is(Token::semi_colon))         
+	{
+		Error::SemiColonNotFound();  
+	}
+	advance();
+
+	Expression* condition = parseCondition();
+
+	if (!Tok.is(Token::semi_colon))         
+	{
+		Error::SemiColonNotFound();  
+	}
+	advance();
+
+	AssignStatement* assign2 = parseAssignInt();  // check class type
+
+	if (!Tok.is(Token::r_paren))
+	{
+		Error::RightParenthesisExpected();
+	}
+	advance();
+
+
+	if (Tok.is(Token::KW_begin))
+	{
+		advance();
+
+		Base* AllStates = parseStatement();
+
+		if (!consume(Token::KW_end))
+		{
+
+			return new ForStatement(a1, condition, a2, AllStates->getStatements(), Statement::StateMentType::For); 
+		}
+		else
+		{
+			Error::EndNotSeenForIf();
+		}
+	}
+	else
+	{
+		Error::BeginExpectedAfterColon();  
+	}
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
