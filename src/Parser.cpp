@@ -292,11 +292,7 @@ Expression* Parser::parsePower()
 	return Left;
 }
 
-
-/*
-	parses factor
-*/
-Expression* Parser::parseFactor()
+Expression* Parser::parseFactor()  
 {
 	Expression* Res = nullptr;
 	switch (Tok.getKind())
@@ -309,7 +305,7 @@ Expression* Parser::parseFactor()
 		advance();
 		break;
 	}
-	case Token::ident:
+	case Token::ident:            
 	{
 		Res = new Expression(Tok.getText());
 		advance();
@@ -322,6 +318,68 @@ Expression* Parser::parseFactor()
 		if (!consume(Token::r_paren))
 			break;
 	}
+	case Token::minus:
+	{
+		advance(); // pass minus
+		if(!consume(Token::l_paren))
+		{
+			Res = parseExpr();
+			if (!consume(Token::r_paren))
+			{
+				return new Expression(false,Res);
+			}
+			else
+			{
+				Error::RightParenthesisExpected();
+			}
+
+		}
+		else if (!consume(Token::number))
+		{
+			int number;
+			Tok.getText().getAsInteger(10, number);
+			Res = new Expression(number);
+			return new Expression(false,Res); 
+		}
+
+		else
+		{
+			Error::UnexpectedTokenAfterMinusOrPlus();
+		}
+
+		break;
+	}
+	case Token::plus:
+	{
+		advance(); // pass plus
+		if(!consume(Token::l_paren))
+		{
+			Res = parseExpr();
+			if (!consume(Token::r_paren))
+			{
+				return new Expression(true,Res);
+			}
+			else
+			{
+				Error::RightParenthesisExpected();
+			}
+
+		}
+		else if (!consume(Token::number))
+		{
+			int number;
+			Tok.getText().getAsInteger(10, number);
+			Res = new Expression(number);
+			return new Expression(true,Res);
+		}
+
+		else
+		{
+			Error::UnexpectedKOOFTafterMinusOrPlus();
+		}
+
+		break;
+	}
 	default: // error handling
 	{
 		Error::NumberVariableExpected();
@@ -330,6 +388,7 @@ Expression* Parser::parseFactor()
 	}
 	return Res;
 }
+
 
 Base* Parser::parse()
 {
