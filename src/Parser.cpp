@@ -160,7 +160,9 @@ llvm::SmallVector<DecStatement*> Parser::parseDefineInt()
 		else if (Tok.is(Token::semi_colon)){
 			SeenTokenVariable = false;
 		}
-
+		else {
+			Error::SemiColonNotFound();
+		}
 	}
 
 	while (variables.size() != 0)
