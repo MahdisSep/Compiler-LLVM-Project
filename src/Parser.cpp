@@ -587,6 +587,29 @@ ForStatement* Parser::parseFor()
 	}
 }
 
+
+/*
+	parses condition like 3 > 5+1 and true
+*/
+Expression* Parser::parseCondition()  
+{
+	Expression* lcondition;
+
+	lcondition = parseSubCondition();
+	if (Tok.is(Token::KW_and))
+	{
+		Expression* rcondition = parseCondition();
+		return new Expression(new BooleanOp(BooleanOp::And, lcondition, rcondition));
+	}
+	else if (Tok.is(Token::KW_or))
+	{
+		Expression* rcondition = parseCondition();
+		return new Expression(new BooleanOp(BooleanOp::Or, lcondition, rcondition));
+	}
+
+}
+
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
