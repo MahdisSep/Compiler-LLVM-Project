@@ -68,6 +68,11 @@ public:
 	}
 
 };
+class TopLevelEntity : AST {
+public:
+	TopLevelEntity() {}
+};
+
 
 
 
