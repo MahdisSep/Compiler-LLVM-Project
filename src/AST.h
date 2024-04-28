@@ -50,6 +50,7 @@ public:
 	virtual ~AST() {}
 	virtual void accept(ASTVisitor& V) = 0;
 };
+
 // base Node that contains all the syntax nodes
 class Base : public AST {
 private:
@@ -68,10 +69,13 @@ public:
 	}
 
 };
+
+
 class TopLevelEntity : AST {
 public:
 	TopLevelEntity() {}
 };
+
 
 
 // Value Expression class that holds information about
@@ -144,6 +148,7 @@ public:
 	bool getBoolean() {
 		return BoolVal;
 	}
+
 	// returns the kind of expression. can be identifier,
 	// number, or an operation
 	ExpressionType getKind()
@@ -155,7 +160,10 @@ public:
 	{
 		V.visit(*this);
 	}
-	class Statement : public TopLevelEntity {
+};
+
+// stores information of a statement. forexample x=56; is a statement
+class Statement : public TopLevelEntity {
 public:
 	enum StateMentType {
 		DeclarationInt,
@@ -247,6 +255,9 @@ public:
 		V.visit(*this);
 	}
 };
+
+
+// if statement
 class IfStatement : public Statement {
 
 private:
@@ -330,6 +341,7 @@ public:
 		V.visit(*this);
 	}
 };
+
 class ElseStatement : public Statement {
 
 private:
@@ -376,6 +388,7 @@ public:
 		V.visit(*this);
 	}
 };
+
 class DefBool : public Statement {
 private:
 
@@ -400,6 +413,7 @@ public:
 		V.visit(*this);
 	}
 };
+
 // assignment statement. forexample x=56;
 // right hand side is an expression
 class AssignStatement : public Statement {
@@ -440,6 +454,7 @@ public:
 		V.visit(*this);
 	}
 };
+
 // Binary Operation for computation of numbers
 // used in the syntax tree stage like 3*(56+a*2)/2
 class BinaryOp : public Expression
@@ -500,6 +515,7 @@ public:
 		V.visit(*this);
 	}
 };
+
 class Print : public Expression
 {
 private:
@@ -515,6 +531,13 @@ public:
 
   Expr *getExpr() { return E; }
 };
+
+
+
+
+
+
+
 /*
 	a boolean operation of form 3 > 5+1 that consists
 	of 2 lefthand and righthand expressions. these expressions
@@ -555,19 +578,6 @@ public:
 		V.visit(*this);
 	}
 };
-
-
-
-
-
-
-	
-};
-
-
-
-
-
-
+//end of ast.h
 
 #endif
