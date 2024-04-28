@@ -184,7 +184,12 @@ namespace {
                     error(DivByZero,Node.getLValue()->getValue());
                 }
             }
-           
+            else if (Node.getOperator() == AssignStatement::Operator::Assign)
+            {
+                if(!((Scope.count(Node.getLValue()->getValue()) && Scope.count(Node.getRValue()->getValue())) || (Scope2.count(Node.getLValue()->getValue()) && Scope2.count(Node.getRValue()->getValue())))) 
+                     error(DiffType,Node.getLValue()->getValue());
+
+            }
                 
             Expression* declaration = (Expression*)Node.getRValue();
             declaration->accept(*this);
