@@ -155,6 +155,61 @@ public:
 	{
 		V.visit(*this);
 	}
+	class Statement : public TopLevelEntity {
+public:
+	enum StateMentType {
+		DeclarationInt,
+		DeclarationBool,
+		Assignment,
+		If,
+		ElseIf,
+		Else,
+		While,
+		For
+	};
+
+private:
+	StateMentType Type;
+
+public:
+
+	StateMentType getKind()
+	{
+		return Type;
+	}
+
+	Statement(StateMentType type) : Type(type) {}
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
+
+class WhileStatement : public Statement {
+
+private:
+	Expression* Condition;
+	llvm::SmallVector<Statement*> Statements;
+
+public:
+	WhileStatement(Expression* condition, llvm::SmallVector<Statement*> statements, StateMentType type) : Condition(condition), Statements(statements), Statement(type) { }
+
+	Expression* getCondition()
+	{
+		return Condition;
+	}
+
+	llvm::SmallVector<Statement*> getStatements()
+	{
+		return Statements;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
 	
 };
 
