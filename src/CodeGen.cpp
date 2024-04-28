@@ -234,6 +234,25 @@ namespace
                 V = Builder.CreateNSWSub(Left, multiplication);
             }
         }
+          virtual void visit(UneryOp& Node) override
+        {
+            // Visit the left-hand side of the unary operation and get its value.
+            Node.getLeft()->accept(*this);
+            Value* Left = V;
+
+
+            // Perform the unary operation based on the operator type and create the corresponding instruction.
+            switch (Node.getOperator())
+            {
+            case UneryOp::Plus:
+                V = Builder.CreateNSWAdd(Left, 1);
+                break;
+            case UneryOp::Minus:
+                V = Builder.CreateNSWSub(Left, 1);
+                break;
+
+            }
+        }
 
     };
 }; // namespace
