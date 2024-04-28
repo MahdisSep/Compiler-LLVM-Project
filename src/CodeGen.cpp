@@ -152,6 +152,46 @@ namespace
             }
         }
 
+        virtual void visit(BooleanOp& Node) override
+        {
+            // Visit the left-hand side of the binary operation and get its value.
+            Node.getLeft()->accept(*this);
+            Value* Left = V;
+
+            // Visit the right-hand side of the binary operation and get its value.
+            Node.getRight()->accept(*this);
+            Value* Right = V;
+
+            // Perform the boolean operation based on the operator type and create the corresponding instruction.
+            switch (Node.getOperator())
+            {
+            case BooleanOp::Equal:
+                V = Builder.CreateICmpEQ(Left, Right);
+                break;
+            case BooleanOp::NotEqual:
+                V = Builder.CreateICmpNE(Left, Right);
+                break;
+            case BooleanOp::Less:
+                V = Builder.CreateICmpSLT(Left, Right);
+                break;
+            case BooleanOp::LessEqual:
+                V = Builder.CreateICmpSLE(Left, Right);
+                break;
+            case BooleanOp::Greater:
+                V = Builder.CreateICmpSGT(Left, Right);
+                break;
+            case BooleanOp::GreaterEqual:
+                V = Builder.CreateICmpSGE(Left, Right);
+                break;
+            case BooleanOp::And:
+                V = Builder.CreateAnd(Left, Right);
+                break;
+            case BooleanOp::Or:
+                V = Builder.CreateOr(Left, Right);
+                break;
+            }
+        }
+
     };
 }; // namespace
 
