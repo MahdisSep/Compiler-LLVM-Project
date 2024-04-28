@@ -475,6 +475,32 @@ public:
 	}
 };
 
+class UneryOp : public Expression
+{
+public:
+	enum Operator
+	{
+		Plus,
+		Minus
+	};
+
+private:                          
+	LLVM::StringRef Ident;                             
+	Operator Op;                            
+
+public:
+	UneryOp(Operator Op, LLVM::StringRef I) : Op(Op), Ident(I) {} 
+
+	Expression* getLeft() { return Ident; }
+
+	Operator getOperator() { return Op; }
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
 
 
 
