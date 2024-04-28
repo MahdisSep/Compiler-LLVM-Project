@@ -60,6 +60,25 @@ namespace {
             }
         };
 
+        virtual void visit(BinaryOp& Node) override {
+            if (Node.getLeft())
+                Node.getLeft()->accept(*this);
+            else
+                HasError = true;
+            if (Node.getRight())
+                Node.getRight()->accept(*this);
+            else
+                HasError = true;
+            if (!(Scope.count(Node.getLeft()->getValue()) && Scope.count(Node.getRight()->getValue()))) 
+                error(MathOp, ((Expression*)Node.getLeft())->getValue());
+                
+            else if (Node.getOperator() == BinaryOp::Operator::Div || Node.getOperator() == BinaryOp::Operator::Mod)
+            {
+                Expression* right = (Expression*)Node.getRight();
+                
+            }
+        };
+
     }
 }
 
