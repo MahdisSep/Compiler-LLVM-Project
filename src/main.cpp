@@ -59,6 +59,8 @@ int main(int argc, const char** argv)
 		llvm::errs() << "Semantic errors occurred...\n";
 		return 1;
 	}
+	CodeGen CodeGenerator;
+	CodeGenerator.compile(Tree);
 
 	return 0;
 }
