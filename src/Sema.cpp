@@ -126,6 +126,18 @@ namespace {
 
         };
 
+         virtual void visit(ElseIfStatement& Node) override {
+
+            Expression* declaration = (Expression*)Node.getCondition();
+            declaration->accept(*this);
+            llvm::SmallVector<Statement* > stmts = Node.getStatements();
+            for (auto I = stmts.begin(), E = stmts.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+
+        };
+
     }
 }
 
