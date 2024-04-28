@@ -206,6 +206,16 @@ namespace {
                 DefBool* declaration = (DefBool*)&Node;
                 declaration->accept(*this);
             }
+            else if (Node.getKind() == Statement::StateMentType::Assignment)
+            {
+                AssignStatement* declaration = (AssignStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::If)
+            {
+                IfStatement* declaration = (IfStatement*)&Node;
+                declaration->accept(*this);
+            }
             
 
         };
