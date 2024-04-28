@@ -23,7 +23,7 @@ class Parser {
 
 	bool expect(Token::TokenKind Kind)
 	{
-		if (Tok.getKind() == Kind)
+		if (Tok.getKind() != Kind)
 		{
 			error();
 			return true;
@@ -52,8 +52,6 @@ public:
 	Expression* parseTerm();
 	Expression* parsePower();
 	Expression* parseFactor();
-	AssignStatement* parseAssignInt();
-	AssignStatement* parseAssignBool();
 	WhileStatement* parseWhile();
 	ForStatement* parseFor();
 	IfStatement* parseIf();
