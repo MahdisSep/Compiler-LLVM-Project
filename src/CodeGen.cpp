@@ -40,6 +40,22 @@ namespace
             Int32Zero = ConstantInt::get(Int32Ty, 0, true);
             CalcWriteFn = Function::Create(CalcWriteFnTy, GlobalValue::ExternalLinkage, "print", M);
         }
+        void run(AST* Tree)
+        {
+            // Create the main function with the appropriate function type.
+            MainFty = FunctionType::get(Int32Ty, { Int32Ty, Int8PtrPtrTy }, false);
+            MainFn = Function::Create(MainFty, GlobalValue::ExternalLinkage, "main", M);
+
+            // Create a basic block for the entry point of the main function.
+            BasicBlock* BB = BasicBlock::Create(M->getContext(), "entry", MainFn);
+            Builder.SetInsertPoint(BB);
+
+            // Visit the root node of the AST to generate IR.
+            Tree->accept(*this);
+
+            // Create a return instruction at the end of the main function.
+            Builder.CreateRet(Int32Zero);
+        }
 
     };
 }; // namespace
