@@ -210,6 +210,43 @@ public:
 		V.visit(*this);
 	}
 };
+
+class ForStatement : public Statement {
+
+private:
+	AssignStatement* Assign1;
+	Expression* Condition;
+    AssignStatement* Assign2;
+	llvm::SmallVector<Statement*> Statements;
+
+public:
+	ForStatement(AssignStatement* a1,Expression* condition,AssignStatement* a2, llvm::SmallVector<Statement*> statements, StateMentType type) : Assign1(a1), Condition(condition), Assign1(a1), Statements(statements), Statement(type) { }
+
+	AssignStatement* getFirstAssign()
+	{
+		return Assign1;
+	}
+
+	Expression* getCondition()
+	{
+		return Condition;
+	}
+
+	AssignStatement* getSecondAssign()
+	{
+		return Assign2;
+	}
+
+	llvm::SmallVector<Statement*> getStatements()
+	{
+		return Statements;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
 	
 };
 
