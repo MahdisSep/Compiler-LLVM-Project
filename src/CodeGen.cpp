@@ -452,9 +452,21 @@ namespace
 
             // Set the insertion point to the block after the while loop.
             Builder.SetInsertPoint(AfterWhileBB);
-
-
         }
+
+        virtual void visit(ForStatement& Node) override   
+         {
+
+         }
+         virtual void visit(Print &Node) override
+        {
+         // Visit the right-hand side of the assignment and get its value.
+             Node.getExpr()->accept(*this);
+             Value *val = V;
+
+         // Create a call instruction to invoke the "print" function with the value.
+            CallInst *Call = Builder.CreateCall(CalcWriteFnTy, CalcWriteFn, {val});
+         }
 
 
 
