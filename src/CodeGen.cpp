@@ -40,6 +40,8 @@ namespace
             Int32Zero = ConstantInt::get(Int32Ty, 0, true);
             CalcWriteFn = Function::Create(CalcWriteFnTy, GlobalValue::ExternalLinkage, "print", M);
         }
+
+        // Entry point for generating LLVM IR from the AST.
         void run(AST* Tree)
         {
             // Create the main function with the appropriate function type.
@@ -56,6 +58,8 @@ namespace
             // Create a return instruction at the end of the main function.
             Builder.CreateRet(Int32Zero);
         }
+
+
         virtual void visit(Base& Node) override
         {
             for (auto I = Node.begin(), E = Node.end(); I != E; ++I)
@@ -63,6 +67,7 @@ namespace
                 (*I)->accept(*this);
             }
         }
+
         virtual void visit(Statement& Node) override
         {
              if (Node.getKind() == Statement::StateMentType::DeclarationInt) 
@@ -152,6 +157,7 @@ namespace
             }
         }
 
+
         virtual void visit(BooleanOp& Node) override
         {
             // Visit the left-hand side of the binary operation and get its value.
@@ -191,6 +197,8 @@ namespace
                 break;
             }
         }
+
+
         virtual void visit(BinaryOp& Node) override
         {
             // Visit the left-hand side of the binary operation and get its value.
@@ -234,7 +242,7 @@ namespace
                 V = Builder.CreateNSWSub(Left, multiplication);
             }
         }
-          virtual void visit(UneryOp& Node) override
+        virtual void visit(UneryOp& Node) override
         {
             // Visit the left-hand side of the unary operation and get its value.
             Node.getLeft()->accept(*this);
@@ -285,7 +293,6 @@ namespace
             }
             
         }
-
         virtual void visit(DefBool& Node) override  
         {
             Value* val = nullptr;                                 // defbool
@@ -418,6 +425,15 @@ namespace
             }
         }
 
+        virtual void visit(ElseStatement& Node) override
+        {
+            llvm::SmallVector<Statement* > stmts = Node.getStatements();
+            for (auto I = stmts.begin(), E = stmts.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+        }
+
         virtual void visit(WhileStatement& Node) override       
         {
 
@@ -452,10 +468,13 @@ namespace
 
             // Set the insertion point to the block after the while loop.
             Builder.SetInsertPoint(AfterWhileBB);
+
+
         }
 
-        virtual void visit(ForStatement& Node) override   
+         virtual void visit(ForStatement& Node) override   
          {
+            
 
          }
          virtual void visit(Print &Node) override
@@ -468,19 +487,24 @@ namespace
             CallInst *Call = Builder.CreateCall(CalcWriteFnTy, CalcWriteFn, {val});
          }
 
-
-
-
-
-
-
-
-
-
-
+         
 
 
 
     };
 }; // namespace
 
+void CodeGen::compile(AST* Tree)
+{
+    // Create an LLVM context and a module.
+    LLVMContext Ctx;
+    Module* M = new Module("mas.expr", Ctx);
+
+    // Create an instance of the ToIRVisitor and run it on the AST to generate LLVM IR.
+    ToIRVisitor ToIRn(M);
+
+    ToIRn.run(Tree);
+
+    // Print the generated module to the standard output.
+    M->print(outs(), nullptr);
+}
