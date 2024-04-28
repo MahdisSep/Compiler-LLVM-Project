@@ -5,6 +5,8 @@
 #include <iostream>
 #include "AST.h"
 #include "CodeGen.h"
+#include "Parser.h"
+#include "Sema.h"
 using namespace std;
 
 
