@@ -144,6 +144,17 @@ public:
 	bool getBoolean() {
 		return BoolVal;
 	}
+	// returns the kind of expression. can be identifier,
+	// number, or an operation
+	ExpressionType getKind()
+	{
+		return Type;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
 	
 };
 
