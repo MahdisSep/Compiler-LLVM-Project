@@ -191,6 +191,49 @@ namespace
                 break;
             }
         }
+        virtual void visit(BinaryOp& Node) override
+        {
+            // Visit the left-hand side of the binary operation and get its value.
+            Node.getLeft()->accept(*this);
+            Value* Left = V;
+
+            // Visit the right-hand side of the binary operation and get its value.
+            Node.getRight()->accept(*this);
+            Value* Right = V;
+
+            // Perform the binary operation based on the operator type and create the corresponding instruction.
+            switch (Node.getOperator())
+            {
+            case BinaryOp::Plus:
+                V = Builder.CreateNSWAdd(Left, Right);
+                break;
+            case BinaryOp::Minus:
+                V = Builder.CreateNSWSub(Left, Right);
+                break;
+            case BinaryOp::Mul:
+                V = Builder.CreateNSWMul(Left, Right);
+                break;
+            case BinaryOp::Div:
+                V = Builder.CreateSDiv(Left, Right);
+                break;
+            case BinaryOp::Pow:
+                if ((Node.getRight())->isNumber())
+                {
+                    int power = (Node.getRight())->getNumber();
+                    Value* result = Left;
+                    for (int i=1; i<power; i++)
+                    {
+                        result = Builder.CreateNSWMul(result, Left);
+                    }
+                    V = result;
+                }
+                break;
+            case BinaryOp::Mod:
+                Value* division = Builder.CreateSDiv(Left, Right);
+                Value* multiplication = Builder.CreateNSWMul(division, Right);
+                V = Builder.CreateNSWSub(Left, multiplication);
+            }
+        }
 
     };
 }; // namespace
