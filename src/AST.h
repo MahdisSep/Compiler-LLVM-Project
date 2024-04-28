@@ -107,6 +107,43 @@ public:
 	Expression(bool sign, int value) : Sign(sign), NumberVal(value),Type(ExpressionType::Number) {}
 	Expression(bool sign, ExpressionType type) : Sign(sign), Type(type) {} 
 
+	bool isNumber() {
+		if (Type == ExpressionType::Number)
+			return true;
+		return false;
+	}
+
+	bool isBoolean() {
+		if (Type == ExpressionType::Boolean)
+			return true;
+		return false;
+	}
+
+	bool isVariable() {
+		if (Type == ExpressionType::Identifier)
+			return true;
+		return false;
+	}
+
+	bool getSign(){
+		return Sign;
+	}
+
+	llvm::StringRef getValue() {
+		return Value;
+	}
+
+	int getNumber() {
+		return NumberVal;
+	}
+
+	BooleanOp* getBooleanOp() {
+		return BOVal;
+	}
+
+	bool getBoolean() {
+		return BoolVal;
+	}
 	
 };
 
