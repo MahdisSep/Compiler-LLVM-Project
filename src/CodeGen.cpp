@@ -332,6 +332,85 @@ namespace
 
         }
 
+        virtual void visit(IfStatement& Node) override
+        {
+            llvm::BasicBlock* IfCondBB = llvm::BasicBlock::Create(M->getContext(), "if.cond", MainFn);
+
+            llvm::BasicBlock* IfBodyBB = llvm::BasicBlock::Create(M->getContext(), "if.body", MainFn);
+
+            llvm::BasicBlock* AfterIfBB = llvm::BasicBlock::Create(M->getContext(), "after.if", MainFn);
+
+            Builder.CreateBr(IfCondBB);
+            Builder.SetInsertPoint(IfCondBB);
+
+            Node.getCondition()->accept(*this);
+            Value* Cond = V;
+
+            Builder.SetInsertPoint(IfBodyBB);
+
+            llvm::SmallVector<Statement*> stmts = Node.getStatements();
+            for (auto I = stmts.begin(), E = stmts.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+
+            Builder.CreateBr(AfterIfBB);
+
+            llvm::BasicBlock* BeforeCondBB = IfCondBB;
+
+            llvm::BasicBlock* BeforeBodyBB = IfBodyBB;
+
+            llvm::Value* BeforeCondVal = Cond;
+
+            if(Node.hasElseIf())  
+            {
+                for (auto& ElseIf : Node.getElseIfsStatements()) {
+                    llvm::BasicBlock* ElifCondBB = llvm::BasicBlock::Create(MainFn->getContext(), "elif.cond", MainFn); //
+
+                    llvm::BasicBlock* ElifBodyBB = llvm::BasicBlock::Create(MainFn->getContext(), "elif.body", MainFn); //
+
+                    Builder.SetInsertPoint(BeforeCondBB);
+
+                    Builder.CreateCondBr(BeforeCondVal, BeforeBodyBB, ElifCondBB);
+
+                    Builder.SetInsertPoint(ElifCondBB);
+                    ElseIf->getCondition()->accept(*this);
+                    llvm::Value* ElifCondVal = V;
+
+                    Builder.SetInsertPoint(ElifBodyBB);
+                    ElseIf->accept(*this);
+                    Builder.CreateBr(AfterIfBB);
+
+                    BeforeCondBB = ElifCondBB;
+                    BeforeCondVal = ElifCondVal;
+                    BeforeBodyBB = ElifBodyBB;
+                }
+            }
+
+            llvm::BasicBlock* ElseBB = nullptr;
+            if (Node.hasElse()) 
+            {
+                ElseStatement* elseS = Node.getElseStatement();
+                ElseBB = llvm::BasicBlock::Create(MainFn->getContext(), "else.body", MainFn);
+                Builder.SetInsertPoint(ElseBB);
+                Node.getElseStatement()->accept(*this);
+                Builder.CreateBr(AfterIfBB);
+
+                Builder.SetInsertPoint(BeforeCondBB);
+                Builder.CreateCondBr(Cond, IfBodyBB, ElseBB);
+
+            } else {
+
+                Builder.SetInsertPoint(BeforeCondBB);
+                Builder.CreateCondBr(Cond, IfBodyBB, AfterIfBB);
+
+            }
+
+            Builder.SetInsertPoint(AfterIfBB);
+        }
+
+
+
 
 
 
