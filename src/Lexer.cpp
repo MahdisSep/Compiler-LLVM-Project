@@ -23,3 +23,12 @@ namespace charinfo {
 			c == ':' || c == ',';
 	}
 }
+
+
+void Lexer::setBufferPtr(const char* buffer){
+	BufferPtr = buffer;
+}
+
+const char* Lexer::getBufferPtr(){
+	return BufferPtr;
+}
