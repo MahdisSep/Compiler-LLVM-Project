@@ -201,6 +201,11 @@ namespace {
                 DefInt* declaration = (DefInt*)&Node;
                 declaration->accept(*this);
             }
+            else if (Node.getKind() == Statement::StateMentType::DeclarationBool)
+            {
+                DefBool* declaration = (DefBool*)&Node;
+                declaration->accept(*this);
+            }
             
 
         };
