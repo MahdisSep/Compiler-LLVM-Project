@@ -318,6 +318,20 @@ namespace
             
         }
 
+        virtual void visit(AssignStatement& Node) override
+        {
+            // Visit the right-hand side of the assignment and get its value.
+            Node.getRValue()->accept(*this);
+            Value* val = V;
+
+            // Get the name of the variable being assigned.
+            auto varName = Node.getLValue()->getValue();
+
+            // Create a store instruction to assign the value to the variable.
+            Builder.CreateStore(val, nameMap[varName]);
+
+        }
+
 
 
 
