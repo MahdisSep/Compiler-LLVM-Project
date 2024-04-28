@@ -62,3 +62,17 @@ void Error::LeftParenthesisExpected()
 	cout << "Left parenthesis expected after print, but found none...\n";
 	exit(3);
 }
+
+void Error::RightParenthesisExpected()
+{
+	cout << "Right parenthesis expected after print, but found none...\n";
+	exit(3);
+}
+
+void Error::OnlyIdentifierCanBePrinted()
+{
+	cout << "Only identifier can be printed...\n";
+	exit(3);
+}
+
+
