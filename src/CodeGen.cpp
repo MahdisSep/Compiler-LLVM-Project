@@ -418,6 +418,45 @@ namespace
             }
         }
 
+        virtual void visit(WhileStatement& Node) override       
+        {
+
+            llvm::BasicBlock* WhileCondBB = llvm::BasicBlock::Create(M->getContext(), "loop.cond", MainFn);
+            // The basic block for the while body.
+            llvm::BasicBlock* WhileBodyBB = llvm::BasicBlock::Create(M->getContext(), "loop.body", MainFn);
+            // The basic block after the while statement.
+            llvm::BasicBlock* AfterWhileBB = llvm::BasicBlock::Create(M->getContext(), "after.loop", MainFn);
+
+            // Branch to the condition block.
+            Builder.CreateBr(WhileCondBB);
+
+            // Set the insertion point to the condition block.
+            Builder.SetInsertPoint(WhileCondBB);
+
+            // Visit the condition expression and create the conditional branch.
+            Node.getCondition()->accept(*this);
+            Value* Cond = V;
+            Builder.CreateCondBr(Cond, WhileBodyBB, AfterWhileBB);
+
+            // Set the insertion point to the body block.
+            Builder.SetInsertPoint(WhileBodyBB);
+
+            llvm::SmallVector<Statement* > stmts = Node.getStatements();
+            for (auto I = stmts.begin(), E = stmts.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+
+            // Branch back to the condition block.
+            Builder.CreateBr(WhileCondBB);
+
+            // Set the insertion point to the block after the while loop.
+            Builder.SetInsertPoint(AfterWhileBB);
+
+
+        }
+
+
 
 
 
