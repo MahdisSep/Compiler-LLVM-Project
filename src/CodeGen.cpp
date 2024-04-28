@@ -63,6 +63,51 @@ namespace
                 (*I)->accept(*this);
             }
         }
+        virtual void visit(Statement& Node) override
+        {
+             if (Node.getKind() == Statement::StateMentType::DeclarationInt) 
+            {
+                DefInt* declaration = (DefInt*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::DeclarationBool)
+            {
+                DefBool* declaration = (DefBool*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::Assignment)
+            {
+                AssignStatement* declaration = (AssignStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::If)
+            {
+                IfStatement* declaration = (IfStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::ElseIf)
+            {
+                ElseIfStatement* declaration = (ElseIfStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::Else)
+            {
+                ElseStatement* declaration = (ElseStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::While)
+            {
+                WhileStatement* declaration = (WhileStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::For)
+            {
+                ForStatement* declaration = (ForStatement*)&Node;
+                declaration->accept(*this);
+            }
+            
+            
+        }
 
     };
 }; // namespace
