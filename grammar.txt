@@ -1,4 +1,4 @@
-S -> DefineInt S | DefineBool S | Assign S | Unary S | If S | For S | While S | Comment S | Print S | DefineInt | DefineBool | Assign | Unary | If | For | While |Comment | Print
+S -> DefineInt S | DefineBool S | AssignInt S | AssignBool S | Unary S | If S | For S | While S | Comment S | Print S | DefineInt | DefineBool | AssignInt | AssignBool | Unary | If | For | While |Comment | Print
 
 DefineInt -> "int" Id EndDefInt | "int" Id "=" Expr EndDefInt 
 EndDefInt -> ";" | "," Id "=" Expr EndDefInt | "," Id EndDefInt
