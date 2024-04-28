@@ -400,6 +400,47 @@ public:
 		V.visit(*this);
 	}
 };
+// assignment statement. forexample x=56;
+// right hand side is an expression
+class AssignStatement : public Statement {
+public:
+ //"+=" | "-=" | "*=" | "/=" | "=" | "%="
+	enum Operator
+	{
+		SumEqual,
+		MinusEqual,
+		StarEqual,
+		DivEqual,
+		Assign,
+		RemainEqual
+	};
+private:
+
+	Expression* lvalue;
+	Expression* rvalue;
+	Operator Op; 
+	Statement::StateMentType type;
+
+public:
+	AssignStatement(Operator Op,Expression* lvalue, Expression* rvalue) : Op(Op), lvalue(lvalue), rvalue(rvalue), type(Statement::StateMentType::Assignment), Statement(type) { }
+	AssignStatement(Expression* lvalue, Expression* rvalue) : lvalue(lvalue), rvalue(rvalue), type(Statement::StateMentType::Assignment), Statement(type) { }
+
+	Expression* getLValue() {
+		return lvalue;
+	}
+
+	Expression* getRValue() {
+		return rvalue;
+	}
+
+	Operator getOperator() { return Op; }
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
 
 
 
