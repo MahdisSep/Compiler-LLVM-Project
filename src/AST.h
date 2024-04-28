@@ -515,6 +515,46 @@ public:
 
   Expr *getExpr() { return E; }
 };
+/*
+	a boolean operation of form 3 > 5+1 that consists
+	of 2 lefthand and righthand expressions. these expressions
+	can be number, identifier or of type binaryop.
+	it has an operator that can be +, -, *, /, % or ^
+*/
+class BooleanOp : public Expression
+{
+public:
+	enum Operator
+	{
+		LessEqual,
+		Less,
+		Greater,
+		GreaterEqual,
+		Equal,
+		NotEqual,
+		And,
+		Or
+	};
+
+private:
+	Expression* Left;                               // Left-hand side expression
+	Expression* Right;                              // Right-hand side expression
+	Operator Op;                              // Operator of the boolean operation
+
+public:
+	BooleanOp(Operator Op, Expression* L, Expression* R) : Op(Op), Left(L), Right(R), Expression(ExpressionType::BooleanOpType) { }
+
+	Expression* getLeft() { return Left; }
+
+	Expression* getRight() { return Right; }
+
+	Operator getOperator() { return Op; }
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
 
 
 
