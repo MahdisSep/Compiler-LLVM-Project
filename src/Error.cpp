@@ -39,3 +39,14 @@ void Error::NumberVariableExpected()
 	cout << "Expected a number or a variable, but found none...\n";
 	exit(3);
 }
+void Error::BeginExpectedAfterColon()
+{
+	cout << "Expected 'begin' after condition, but found none...\n";
+	exit(3);
+}
+
+void Error::EndNotSeenForIf()
+{
+	cout << "Expected 'end' for if statement, but found none...\n";
+	exit(3);
+}
