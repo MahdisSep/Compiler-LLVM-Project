@@ -286,7 +286,39 @@ namespace
             
         }
 
-        
+        virtual void visit(DefBool& Node) override  
+        {
+            Value* val = nullptr;                                 // defbool
+
+            if (Node.getRValue()->getKind() == Expression::ExpressionType::BooleanOpType || Node.getRValue()->isBoolean())
+            {
+                // If there is an expression provided, visit it and get its value.
+                Node.getRValue()->accept(*this);
+                val = V;
+            }
+
+            // Iterate over the variables declared in the declaration statement.
+
+            auto I = Node.getLValue()->getValue();
+            StringRef Var = I;
+
+            // Create an alloca instruction to allocate memory for the variable.
+            nameMap[Var] = Builder.CreateAlloca(Int32Ty);                               //befahmim
+
+            // Store the initial value (if any) in the variable's memory location.
+            if (val != nullptr)
+            {
+                Builder.CreateStore(val, nameMap[Var]);
+            }
+            else
+            {
+                Value* Zero = ConstantInt::get(Type::getInt32Ty(M->getContext()), 0);
+                Builder.CreateStore(Zero, nameMap[Var]);
+            }
+            
+        }
+
+
 
 
 
