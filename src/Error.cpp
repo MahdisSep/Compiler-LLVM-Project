@@ -17,3 +17,14 @@ void Error::AssignmentEqualNotFound()
 	exit(3);
 }
 
+void Error::AssignmentSidesNotEqual()
+{
+	cout << "Assignment sides are not equal in size...\n";
+	exit(3);
+}
+
+void Error::VariableNameNotFound()
+{
+	cout << "Variable name not found...\n";
+	exit(3);
+}
