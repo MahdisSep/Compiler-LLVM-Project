@@ -330,6 +330,24 @@ public:
 		V.visit(*this);
 	}
 };
+class ElseStatement : public Statement {
+
+private:
+	llvm::SmallVector<Statement*> Statements;
+
+public:
+	ElseStatement(llvm::SmallVector<Statement*> statements, StateMentType type): Statements(statements), Statement(type) { }
+
+	llvm::SmallVector<Statement*> getStatements()
+	{
+		return Statements;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
 
 	
 };
