@@ -28,3 +28,14 @@ void Error::VariableNameNotFound()
 	cout << "Variable name not found...\n";
 	exit(3);
 }
+void Error::BooleanValueExpected()
+{
+	cout << "Boolean value expected...\n";
+	exit(3);
+}
+
+void Error::NumberVariableExpected()
+{
+	cout << "Expected a number or a variable, but found none...\n";
+	exit(3);
+}
