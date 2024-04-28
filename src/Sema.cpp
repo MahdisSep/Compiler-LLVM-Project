@@ -169,6 +169,27 @@ namespace {
             }
 
         };
+           virtual void visit(AssignStatement& Node) override {
+            auto I = (Node.getLValue());
+
+           
+            if (!Scope.count(Node.getLValue()->getValue()) && !Scope2.count(Node.getLValue()->getValue())) 
+                error(Not, Node.getLValue()->getValue());
+            else if (!(Scope.count(Node.getLValue()->getValue()) && Scope.count(Node.getRValue()->getValue())) && Node.getOperator() != AssignStatement::Operator::Assign) 
+                error(MathOp,Node.getLValue()->getValue());
+            else if (Node.getOperator() == AssignStatement::Operator::DivEqual || Node.getOperator() == AssignStatement::Operator::RemainEqual)
+            {
+                Expression* right = (Expression*)Node.getRValue();
+                if (right->isNumber() && right->getNumber() == 0) {
+                    error(DivByZero,Node.getLValue()->getValue());
+                }
+            }
+           
+                
+            Expression* declaration = (Expression*)Node.getRValue();
+            declaration->accept(*this);
+
+        };
 
     }
 }
