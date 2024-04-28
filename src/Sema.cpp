@@ -103,6 +103,18 @@ namespace {
             
         };
 
+        virtual void visit(DefBool& Node) override {
+
+            auto I = (Node.getLValue());
+
+            if (!Scope.insert(Node.getLValue()->getValue()).second && !Scope2.insert(Node.getLValue()->getValue()).second)
+                error(Twice, Node.getLValue()->getValue());
+
+            Expression* declaration = (Expression*)Node.getRValue();
+            declaration->accept(*this);
+            
+        };
+
     }
 }
 
