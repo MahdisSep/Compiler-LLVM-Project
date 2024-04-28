@@ -304,6 +304,33 @@ public:
 		V.visit(*this);
 	}
 };
+
+class ElseIfStatement : public Statement {
+
+private:
+	Expression* Condition;
+	llvm::SmallVector<Statement*> Statements;
+
+public:
+	ElseIfStatement(Expression* condition, llvm::SmallVector<Statement*> statements, StateMentType type): 
+	tion(condition), Statements(statements), Statement(type) { }
+
+	Expression* getCondition()
+	{
+		return Condition;
+	}
+
+	llvm::SmallVector<Statement*> getStatements()
+	{
+		return Statements;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
 	
 };
 
