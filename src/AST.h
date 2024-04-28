@@ -247,6 +247,63 @@ public:
 		V.visit(*this);
 	}
 };
+class IfStatement : public Statement {
+
+private:
+	Expression* Condition;
+	llvm::SmallVector<Statement*> Statements;
+	llvm::SmallVector<ElseIfStatement*> ElseIfsStatements;
+	ElseStatement* ElseStatements;
+	bool HasElseIf;
+	bool HasElse;
+
+public:
+	IfStatement(Expression* condition,
+	 llvm::SmallVector<Statement*> statements,
+	 llvm::SmallVector<ElseIfStatement*> elseIfsStatements,
+	 ElseStatement* elseStatement,
+	 bool hasElseIf, bool hasElse,
+	 StateMentType type): Condition(condition),
+	 Statements(statements),
+	 ElseIfsStatements(elseIfsStatements),
+	 ElseStatements(elseStatement),
+	 HasElseIf(hasElseIf),
+	 HasElse(hasElse),
+	 Statement(type) { }
+
+	Expression* getCondition()
+	{
+		return Condition;
+	}
+
+	bool hasElseIf(){
+		return HasElseIf;
+	}
+
+	bool hasElse(){
+		return HasElse;
+	}
+
+	llvm::SmallVector<ElseIfStatement*> getElseIfsStatements()
+	{
+		return elseIfsStatements;
+	}
+
+	llvm::SmallVector<Statement*> getStatements()
+	{
+		return Statements;
+	}
+
+	ElseStatement* getElseStatement()
+	{
+		return ElseStatements;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
 	
 };
 
