@@ -32,3 +32,9 @@ void Lexer::setBufferPtr(const char* buffer){
 const char* Lexer::getBufferPtr(){
 	return BufferPtr;
 }
+
+void Lexer::formToken(Token& Tok, const char* TokEnd, Token::TokenKind Kind) {
+	Tok.Kind = Kind;
+	Tok.Text = llvm::StringRef(BufferPtr, TokEnd - BufferPtr);
+	BufferPtr = TokEnd;
+}
