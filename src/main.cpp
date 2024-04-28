@@ -52,6 +52,7 @@ int main(int argc, const char** argv)
 
 	Lexer lexer(contentRef);
 	Parser Parser(lexer);
+	AST* Tree = Parser.parse();
 
 
 	return 0;
