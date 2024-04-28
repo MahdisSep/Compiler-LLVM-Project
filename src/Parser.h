@@ -23,7 +23,7 @@ class Parser {
 
 	bool expect(Token::TokenKind Kind)
 	{
-		if (Tok.getKind() != Kind)
+		if (Tok.getKind() == Kind)
 		{
 			error();
 			return true;
