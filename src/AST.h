@@ -376,6 +376,31 @@ public:
 		V.visit(*this);
 	}
 };
+class DefBool : public Statement {
+private:
+
+	Expression* lvalue;
+	Expression* rvalue;
+	Statement::StateMentType type;
+
+public:
+	DefBool(Expression* lvalue, Expression* rvalue) : lvalue(lvalue), rvalue(rvalue), type(Statement::StateMentType::DeclarationBool), Statement(type) { }
+	DefBool(Expression* lvalue) : lvalue(lvalue), rvalue(rvalue), type(Statement::StateMentType::DeclarationBool), Statement(type) { rvalue = new Expression(0); }
+
+	Expression* getLValue() {
+		return lvalue;
+	}
+
+	Expression* getRValue() {
+		return rvalue;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
 
 
 	
