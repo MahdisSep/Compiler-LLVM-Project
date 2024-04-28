@@ -74,6 +74,44 @@ public:
 };
 
 
+// Value Expression class that holds information about
+// numbers or variable names. forexample a or 56 are 
+// ValExpression and become part of the syntax tree
+class Expression : public TopLevelEntity {
+public:
+	enum ExpressionType {
+		Number,
+		Identifier,
+		Boolean,
+		BinaryOpType,
+		BooleanOpType
+	};
+private:
+	ExpressionType Type; // can be number of variable name
+
+	// if it holds a number NumberVal is used else Value is
+	// used to store variable name
+	llvm::StringRef Value;
+	int NumberVal;
+	bool BoolVal;
+	bool Sign; // true -> +
+	BooleanOp* BOVal;
+
+public:
+	Expression() {}
+	Expression(llvm::StringRef value) : Type(ExpressionType::Identifier), Value(value) {} // store string
+	Expression(int value) : Type(ExpressionType::Number), NumberVal(value) {} // store number
+	Expression(bool value) : Type(ExpressionType::Boolean), BoolVal(value) {} // store boolean -->true,false
+	Expression(BooleanOp* value) : Type(ExpressionType::BooleanOpType), BOVal(value) {} // store boolean
+	Expression(ExpressionType type) : Type(type) {}
+	Expression(bool sign, int value) : Sign(sign), NumberVal(value),Type(ExpressionType::Number) {}
+	Expression(bool sign, ExpressionType type) : Sign(sign), Type(type) {} 
+
+	
+};
+
+
+
 
 
 
