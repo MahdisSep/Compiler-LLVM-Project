@@ -798,6 +798,34 @@ ElseIfStatement* Parser::parseElseIf()
 	}
 }
 
+
+ElseStatement* Parser::parseElse()  
+{
+	advance();			// pass if identifier
+
+	if (Tok.is(Token::KW_begin))
+	{
+		advance();
+
+		Base* AllStates = parseStatement();
+
+		if (!consume(Token::KW_end))
+		{
+	
+			return new ElseStatement(AllStates->getStatements(), Statement::StateMentType::Else);
+		}
+		else
+		{
+			Error::EndNotSeenForIf();
+		}
+	}
+	else
+	{
+		Error::BeginExpectedAfterColon();
+	}
+}
+
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
