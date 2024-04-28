@@ -75,7 +75,9 @@ namespace {
             else if (Node.getOperator() == BinaryOp::Operator::Div || Node.getOperator() == BinaryOp::Operator::Mod)
             {
                 Expression* right = (Expression*)Node.getRight();
-                
+                if (right->isNumber() && right->getNumber() == 0) {
+                    error(DivByZero, ((Expression*)Node.getLeft())->getValue());
+                }
             }
         };
 
