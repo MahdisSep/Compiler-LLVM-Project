@@ -226,6 +226,16 @@ namespace {
                 ElseStatement* declaration = (ElseStatement*)&Node;
                 declaration->accept(*this);
             }
+             else if (Node.getKind() == Statement::StateMentType::While)
+            {
+                WhileStatement* declaration = (WhileStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::For)
+            {
+                ForStatement* declaration = (ForStatement*)&Node;
+                declaration->accept(*this);
+            }
             
 
         };
