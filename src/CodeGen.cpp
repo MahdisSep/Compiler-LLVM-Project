@@ -56,6 +56,13 @@ namespace
             // Create a return instruction at the end of the main function.
             Builder.CreateRet(Int32Zero);
         }
+        virtual void visit(Base& Node) override
+        {
+            for (auto I = Node.begin(), E = Node.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+        }
 
     };
 }; // namespace
