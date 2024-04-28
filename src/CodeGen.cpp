@@ -109,6 +109,49 @@ namespace
             
         }
 
+        virtual void visit(Expression& Node) override
+        {
+            if (Node.getKind() == Expression::ExpressionType::Identifier)
+            {
+                V = Builder.CreateLoad(Int32Ty, nameMap[Node.getValue()]);
+            }
+            else if (Node.getKind() == Expression::ExpressionType::Number)
+            {
+               
+                int intval = Node.getNumber();
+                V = ConstantInt::get(Int32Ty, intval, true);
+            }
+            else if (Node.getKind() == Expression::ExpressionType::Boolean)
+            {
+               
+                bool boolVal = Node.getBoolean();
+                V = ConstantInt::get(Int32Ty, boolVal, true);                              //boolean
+            }
+            else if (Node.getKind() == Expression::ExpressionType::BooleanOpType) {
+                BooleanOp* temp = Node.getBooleanOp();
+                if (temp->getOperator() == BooleanOp::Operator::And)
+                {
+                    (temp->getLeft())->accept(*this);
+                    Value* Left = V;
+
+                    (temp->getRight())->accept(*this);
+                    Value* Right = V;
+
+                    V = Builder.CreateAnd(Left, Right);
+                }
+                else if (temp->getOperator() == BooleanOp::Operator::Or)
+                {
+                    (temp->getLeft())->accept(*this);
+                    Value* Left = V;
+
+                    (temp->getRight())->accept(*this);
+                    Value* Right = V;
+
+                    V = Builder.CreateOr(Left, Right);
+                }
+            }
+        }
+
     };
 }; // namespace
 
