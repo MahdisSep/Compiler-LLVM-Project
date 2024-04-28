@@ -880,6 +880,20 @@ Base* Parser::parseStatement()
 	return new Base(statements);
 }
 
+
+void Parser::parseComment()
+{
+    advance();  // pass '/*'
+
+    while (!Tok.isOneOf(Token::end_comment, Token::eof)) 
+		advance();
+
+	if (Tok.is(Token::eof)){
+		Error::EndCommentExpected();
+	}
+    return;
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
