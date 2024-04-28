@@ -826,6 +826,60 @@ ElseStatement* Parser::parseElse()
 }
 
 
+Base* Parser::parseStatement()  
+{
+	llvm::SmallVector<Statement*> statements;
+	while (!Tok.is(Token::KW_end))
+	{
+		switch (Tok.getKind())
+		{
+		case Token::ident:
+		{
+			Token temp = Tok;
+			const char* ptr = Lexer::getBufferPtr();
+			AssignStatement* statement = parseAssignBool();
+			if (!statement){
+				Tok = temp;
+				Tok.setBufferPtr(ptr);
+				AssignStatement* statement = parseAssignInt();
+			}
+			statements.push_back(statement);
+			break;
+		}
+		case Token::KW_int:
+		{
+			Error::DefineInsideScope();
+		}
+		case Token::KW_if:
+		{
+			IfStatement* statement = parseIf();
+			statements.push_back(statement);
+			break;
+
+		}
+		case Token::KW_for:
+		{
+			ForStatement* statement = parseFor();
+			statements.push_back(statement);
+			break;
+		}
+		case Token::KW_while:
+		{
+			WStatement* statement = parseWhile();
+			statements.push_back(statement);
+			break;
+		}
+
+		default:
+		{
+			return new Base(statements);
+		}
+
+		}
+	}
+	return new Base(statements);
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
