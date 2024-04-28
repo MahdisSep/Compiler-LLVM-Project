@@ -7,6 +7,7 @@
 #include "CodeGen.h"
 #include "Parser.h"
 #include "Sema.h"
+
 using namespace std;
 
 
@@ -55,16 +56,21 @@ int main(int argc, const char** argv)
 	Token nextToken;
 
 	Lexer lexer(contentRef);
-	Parser Parser(lexer);
-	AST* Tree = Parser.parse();
-	Sema Semantic;
-	if (Semantic.semantic(Tree))
-	{
-		llvm::errs() << "Semantic errors occurred...\n";
-		return 1;
-	}
+
+
+	//Parser Parser(lexer);
+	//AST* Tree = Parser.parse();
+
+	//Sema Semantic;
+	//if (Semantic.semantic(Tree))
+	//{
+	//	llvm::errs() << "Semantic errors occurred...\n";
+	//	return 1;
+	//}
+	
 	CodeGen CodeGenerator;
 	CodeGenerator.compile(Tree);
+
 
 	return 0;
 }
