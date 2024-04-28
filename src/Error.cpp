@@ -50,3 +50,15 @@ void Error::EndNotSeenForIf()
 	cout << "Expected 'end' for if statement, but found none...\n";
 	exit(3);
 }
+
+void Error::EndCommentExpected()
+{
+	cout << "*/ expected after comment, but found none...\n";
+	exit(3);
+}
+
+void Error::LeftParenthesisExpected()
+{
+	cout << "Left parenthesis expected after print, but found none...\n";
+	exit(3);
+}
