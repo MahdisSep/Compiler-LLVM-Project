@@ -250,6 +250,15 @@ namespace {
                 HasError = true;
 
         };
+        
+         virtual void visit(Base& Node) override {
+            for (auto I = Node.begin(), E = Node.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+
+        };
+
 
     }
 }
