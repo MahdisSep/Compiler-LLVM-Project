@@ -409,7 +409,14 @@ namespace
             Builder.SetInsertPoint(AfterIfBB);
         }
 
-
+        virtual void visit(ElseIfStatement& Node) override   
+        {
+            llvm::SmallVector<Statement* > stmts = Node.getStatements();
+            for (auto I = stmts.begin(), E = stmts.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+        }
 
 
 
