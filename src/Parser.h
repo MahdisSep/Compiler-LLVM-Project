@@ -52,6 +52,8 @@ public:
 	Expression* parseTerm();
 	Expression* parsePower();
 	Expression* parseFactor();
+	AssignStatement* parseAssignInt();
+	AssignStatement* parseAssignBool();
 	WhileStatement* parseWhile();
 	ForStatement* parseFor();
 	IfStatement* parseIf();
