@@ -157,6 +157,18 @@ namespace {
             }
 
         };
+        virtual void visit(ForStatement& Node) override {
+
+            Node.getCondition()->accept(*this);
+            Node.getFirstAssign()->accept(*this);
+            Node.getSecondAssign()->accept(*this);
+            llvm::SmallVector<Statement* > stmts = Node.getStatements();
+            for (auto I = stmts.begin(), E = stmts.end(); I != E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+
+        };
 
     }
 }
