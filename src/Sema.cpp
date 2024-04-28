@@ -81,6 +81,17 @@ namespace {
             }
         };
 
+         virtual void visit(UneryOp& Node) override {    
+            if (Node.getLeft())
+                Node.getLeft()->accept(*this);
+            else
+                HasError = true;
+           
+            if (Scope.find(Node.getLeft()) == Scope.end())
+                    error(Not, Node.getValue());
+               
+        };
+
     }
 }
 
