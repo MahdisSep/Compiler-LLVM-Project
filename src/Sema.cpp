@@ -236,7 +236,18 @@ namespace {
                 ForStatement* declaration = (ForStatement*)&Node;
                 declaration->accept(*this);
             }
-            
+       
+        };
+
+        virtual void visit(BooleanOp& Node) override {
+            if (Node.getLeft())
+                Node.getLeft()->accept(*this);
+            else
+                HasError = true;
+            if (Node.getRight())
+                Node.getRight()->accept(*this);
+            else
+                HasError = true;
 
         };
 
