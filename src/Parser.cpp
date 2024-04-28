@@ -695,6 +695,66 @@ Expression* Parser::parseSubCondition()
 }
 
 
+/*
+	parse if statement and return the control statement
+	associated with it.
+*/
+IfStatement* Parser::parseIf()  
+{
+	advance();			// pass if identifier
+
+	if (!Tok.is(Token::l_paren))         
+	{
+		Error::LeftParenthesisExpected();
+	}
+	advance();
+
+	Expression* condition = parseCondition();
+
+	if (!Tok.is(Token::r_paren))         
+	{
+		Error::RightParenthesisExpected();
+	}
+	advance();
+
+	if (Tok.is(Token::KW_begin))
+	{
+		advance();
+
+		Base* AllStates = parseStatement();
+
+		if (!consume(Token::KW_end))
+		{
+			llvm::SmallVector<ElseIfStatement*> ElseIfS;  
+			ElseStatement* ElseS;
+			bool hasElseIf = false;
+			bool hasElse = false;
+
+			while (Tok.is(Token::KW_elseif))
+			{
+				ElseIfStatement* statement = parseElseif(); 
+				ElseIfS.push_back(statement);
+				hasElseIf = true;
+			}
+			if (Tok.is(Token::KW_else))
+			{
+				ElseS = parseElse();
+				hasElse = true;
+			}
+			return new IfStatement(condition, AllStates->getStatements(),
+									ElseIfS, ElseS, hasElseIf, hasElse,
+									Statement::StateMentType::If);
+		}
+		else
+		{
+			Error::EndNotSeenForIf();
+		}
+	}
+	else
+	{
+		Error::BeginExpectedAfterColon();
+	}
+}
 
 Base* Parser::parse()
 {
