@@ -440,6 +440,41 @@ public:
 		V.visit(*this);
 	}
 };
+// Binary Operation for computation of numbers
+// used in the syntax tree stage like 3*(56+a*2)/2
+class BinaryOp : public Expression
+{
+public:
+	enum Operator
+	{
+		Plus,
+		Minus,
+		Mul,
+		Div,
+		Mod,
+		Pow
+	};
+
+private:
+	Expression* Left;                               // Left-hand side expression
+	Expression* Right;                              // Right-hand side expression
+	Operator Op;                              // Operator of the binary operation
+
+public:
+	BinaryOp(Operator Op, Expression* L, Expression* R) : Op(Op), Left(L), Right(R), Expression(ExpressionType::BinaryOpType) {}
+
+	Expression* getLeft() { return Left; }
+
+	Expression* getRight() { return Right; }
+
+	Operator getOperator() { return Op; }
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
 
 
 
