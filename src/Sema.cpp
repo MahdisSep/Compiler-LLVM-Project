@@ -216,6 +216,16 @@ namespace {
                 IfStatement* declaration = (IfStatement*)&Node;
                 declaration->accept(*this);
             }
+            else if (Node.getKind() == Statement::StateMentType::ElseIf)
+            {
+                ElseIfStatement* declaration = (ElseIfStatement*)&Node;
+                declaration->accept(*this);
+            }
+            else if (Node.getKind() == Statement::StateMentType::Else)
+            {
+                ElseStatement* declaration = (ElseStatement*)&Node;
+                declaration->accept(*this);
+            }
             
 
         };
