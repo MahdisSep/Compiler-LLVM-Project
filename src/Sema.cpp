@@ -195,6 +195,15 @@ namespace {
             declaration->accept(*this);
 
         };
+         virtual void visit(Statement& Node) override {
+            if (Node.getKind() == Statement::StateMentType::DeclarationInt) 
+            {
+                DefInt* declaration = (DefInt*)&Node;
+                declaration->accept(*this);
+            }
+            
+
+        };
 
     }
 }
