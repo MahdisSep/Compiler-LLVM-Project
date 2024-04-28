@@ -349,6 +349,35 @@ public:
 	}
 };
 
+/*
+	Declaration statement like int x; or int a = 3;
+*/
+class DefInt : public Statement {
+private:
+
+	Expression* lvalue;
+	Expression* rvalue;
+	Statement::StateMentType type;
+
+public:
+	DefInt(Expression* lvalue, Expression* rvalue) : lvalue(lvalue), rvalue(rvalue), type(Statement::StateMentType::DeclarationInt), Statement(type) { }
+	DefInt(Expression* lvalue) : lvalue(lvalue), rvalue(rvalue), type(Statement::StateMentType::DeclarationInt), Statement(type) { rvalue = new Expression(0); }
+
+	Expression* getLValue() {
+		return lvalue;
+	}
+
+	Expression* getRValue() {
+		return rvalue;
+	}
+
+	virtual void accept(ASTVisitor& V) override
+	{
+		V.visit(*this);
+	}
+};
+
+
 	
 };
 
