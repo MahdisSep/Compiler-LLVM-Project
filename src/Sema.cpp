@@ -11,7 +11,7 @@ namespace {
 
         enum ErrorType { Twice, Not, DivByZero ,MathOp,DiffType };
 
-          void error(ErrorType ET, llvm::StringRef V) {
+        void error(ErrorType ET, llvm::StringRef V) {
             if (ET == ErrorType::DivByZero) {
                 llvm::errs() << "Division by zero is not allowed." << "\n";
             }
@@ -28,14 +28,13 @@ namespace {
             HasError = true;
             exit(3);
         }
-        
         //not --> expression , assignment , unery
         //twice --> define
         //divbyzero --> binary op , assignment
         //MathOp --> binaryOp , assignment
         //DiffType --> assignment
 
-         public:
+    public:
         DeclCheck() : HasError(false) {}
 
         bool hasError() { return HasError; }
@@ -81,7 +80,7 @@ namespace {
             }
         };
 
-         virtual void visit(UneryOp& Node) override {    
+        virtual void visit(UneryOp& Node) override {    
             if (Node.getLeft())
                 Node.getLeft()->accept(*this);
             else
@@ -91,6 +90,7 @@ namespace {
                     error(Not, Node.getValue());
                
         };
+
         virtual void visit(DefInt& Node) override {
 
             auto I = (Node.getLValue());
@@ -103,7 +103,7 @@ namespace {
             
         };
 
-        virtual void visit(DefBool& Node) override {
+         virtual void visit(DefBool& Node) override {
 
             auto I = (Node.getLValue());
 
@@ -114,6 +114,7 @@ namespace {
             declaration->accept(*this);
             
         };
+
         virtual void visit(IfStatement& Node) override {
 
             Expression* declaration = (Expression*)Node.getCondition();
@@ -126,7 +127,7 @@ namespace {
 
         };
 
-         virtual void visit(ElseIfStatement& Node) override {
+        virtual void visit(ElseIfStatement& Node) override {
 
             Expression* declaration = (Expression*)Node.getCondition();
             declaration->accept(*this);
@@ -137,6 +138,8 @@ namespace {
             }
 
         };
+
+
         virtual void visit(ElseStatement& Node) override {
 
             llvm::SmallVector<Statement* > stmts = Node.getStatements();
@@ -146,6 +149,7 @@ namespace {
             }
 
         };
+
         virtual void visit(WhileStatement& Node) override {
 
             Node.getCondition()->accept(*this);
@@ -157,7 +161,8 @@ namespace {
             }
 
         };
-        virtual void visit(ForStatement& Node) override {
+
+         virtual void visit(ForStatement& Node) override {
 
             Node.getCondition()->accept(*this);
             Node.getFirstAssign()->accept(*this);
@@ -169,7 +174,8 @@ namespace {
             }
 
         };
-           virtual void visit(AssignStatement& Node) override {
+
+        virtual void visit(AssignStatement& Node) override {
             auto I = (Node.getLValue());
 
            
@@ -195,7 +201,8 @@ namespace {
             declaration->accept(*this);
 
         };
-         virtual void visit(Statement& Node) override {
+
+        virtual void visit(Statement& Node) override {
             if (Node.getKind() == Statement::StateMentType::DeclarationInt) 
             {
                 DefInt* declaration = (DefInt*)&Node;
@@ -226,7 +233,7 @@ namespace {
                 ElseStatement* declaration = (ElseStatement*)&Node;
                 declaration->accept(*this);
             }
-             else if (Node.getKind() == Statement::StateMentType::While)
+            else if (Node.getKind() == Statement::StateMentType::While)
             {
                 WhileStatement* declaration = (WhileStatement*)&Node;
                 declaration->accept(*this);
@@ -236,7 +243,7 @@ namespace {
                 ForStatement* declaration = (ForStatement*)&Node;
                 declaration->accept(*this);
             }
-       
+
         };
 
         virtual void visit(BooleanOp& Node) override {
@@ -250,8 +257,8 @@ namespace {
                 HasError = true;
 
         };
-        
-         virtual void visit(Base& Node) override {
+
+        virtual void visit(Base& Node) override {
             for (auto I = Node.begin(), E = Node.end(); I != E; ++I)
             {
                 (*I)->accept(*this);
@@ -260,7 +267,7 @@ namespace {
         };
 
 
-    }
+    };
 }
 
 bool Sema::semantic(AST* Tree) {
