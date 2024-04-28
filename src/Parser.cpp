@@ -894,6 +894,32 @@ void Parser::parseComment()
     return;
 }
 
+
+PrintStatement* Parser::parsePrint()  
+{
+	Expression* E;
+	advance();  // pass print
+
+	if (!Tok.is(Token::l_paren)){
+		Error::LeftParenthesisExpected();
+	}
+
+	advance();  
+	
+	E = parseExpr();                        
+
+	if (!Tok.is(Token::r_paren)){
+		Error::RightParenthesisExpected();
+	}
+	advance();  // pass ')'
+
+	if (!Tok.is(Token::semi_colon)){
+		Error::SemiColonNotFound();
+	}
+	advance();  // pass semicolon
+    return new Print(E);                 
+}
+
 Base* Parser::parse()
 {
 	Base* Res = parseS();
