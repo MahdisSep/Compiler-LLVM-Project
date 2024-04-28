@@ -500,6 +500,22 @@ public:
 		V.visit(*this);
 	}
 };
+class Print : public Expression
+{
+private:
+  Expression *E;
+
+public:
+  Print(Expr *e) : E(e) {}
+
+  virtual void accept(ASTVisitor &V) override
+  {
+    V.visit(*this);
+  }
+
+  Expr *getExpr() { return E; }
+};
+
 
 
 
