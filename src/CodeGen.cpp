@@ -444,9 +444,9 @@ namespace
         virtual void visit(WhileStatement& Node) override       
         {
 
-            llvm::BasicBlock* WhileCondBB = llvm::BasicBlock::Create(M->getContext(), "loop.cond", MainFn);
+            llvm::BasicBlock* WhileCondBB = llvm::BasicBlock::Create(M->getContext(), "while.cond", MainFn);
             // The basic block for the while body.
-            llvm::BasicBlock* WhileBodyBB = llvm::BasicBlock::Create(M->getContext(), "loop.body", MainFn);
+            llvm::BasicBlock* WhileBodyBB = llvm::BasicBlock::Create(M->getContext(), "while.body", MainFn);
             // The basic block after the while statement.
             llvm::BasicBlock* AfterWhileBB = llvm::BasicBlock::Create(M->getContext(), "after.loop", MainFn);
 
@@ -482,6 +482,34 @@ namespace
          virtual void visit(ForStatement& Node) override   
          {
             
+             llvm::BasicBlock* ForCondBB = llvm::BasicBlock::Create(M->getContext(), "for.cond", Builder.GetInsertBlock()->getParent());
+            // The basic block for the while body.
+            llvm::BasicBlock* ForBodyBB = llvm::BasicBlock::Create(M->getContext(), "for.body", Builder.GetInsertBlock()->getParent());
+            // The basic block after the while statement.
+            llvm::BasicBlock* AfterForBB = llvm::BasicBlock::Create(M->getContext(), "after.loop", Builder.GetInsertBlock()->getParent());
+
+            Node.getFirst()->accept(*this);
+
+            Builder.CreateBr(ForCondBB); //?
+
+            Builder.SetInsertPoint(ForCondBB);
+            Node.getSecond()->accept(*this);
+            Value* val=V;
+            Builder.CreateCondBr(val,ForBodyBB,AfterForBB);
+
+            Builder.SetInsertPoint(ForBodyBB);
+            for(llvm::SmallVector<AST*>::const_iterator I = Node.begin(),E = Node.end();I !=E; ++I)
+            {
+                (*I)->accept(*this);
+            }
+            if(Node.getThirdAssign()==nullptr)
+                Node.getThirdUnary()->accept(*this);
+            else
+                Node.getThirdAssign()->accept(*this);
+
+            Builder.CreateBr(ForCondBB);
+
+            Builder.SetInsertPoint(AfterForBB);
 
          }
          virtual void visit(Print &Node) override
