@@ -20,10 +20,16 @@ namespace
         Type* Int8PtrTy;
         Type* Int8PtrPtrTy;
         Constant* Int32Zero;
+        Constant* Int32One;
+        Constant* Int1False;
+        Constant* Int1True;
         
 
         Value* V;
-        StringMap<AllocaInst*> nameMap;
+        StringMap<AllocaInst*> nameMapInt;
+        StringMap<AllocaInst*> nameMapBool;
+
+        
 
         FunctionType* MainFty;
         Function* MainFn;
