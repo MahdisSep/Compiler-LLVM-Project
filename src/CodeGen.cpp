@@ -316,7 +316,7 @@ namespace
             StringRef Var = I;
 
             // Create an alloca instruction to allocate memory for the variable.
-            nameMapBool[Var] = Builder.CreateAlloca(Int32Ty);                               //befahmim
+            nameMapBool[Var] = Builder.CreateAlloca(Int1Ty);                               //befahmim
 
             // Store the initial value (if any) in the variable's memory location.
             if (val != nullptr)
