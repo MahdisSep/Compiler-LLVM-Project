@@ -15,7 +15,7 @@ namespace
         Module* M;
         IRBuilder<> Builder;
         Type* VoidTy;
-        Type* Int1Ty;
+        Type* Int1Ty; //boolean
         Type* Int32Ty;
         Type* Int8PtrTy;
         Type* Int8PtrPtrTy;
