@@ -29,7 +29,6 @@ namespace
         StringMap<AllocaInst*> nameMapInt;
         StringMap<AllocaInst*> nameMapBool;
 
-        
 
         FunctionType* MainFty;
         Function* MainFn;
@@ -125,7 +124,7 @@ namespace
         {
             if (Node.getKind() == Expression::ExpressionType::Identifier)
             {
-                V = Builder.CreateLoad(Int32Ty, nameMap[Node.getValue()]);
+                V = Builder.CreateLoad(Int32Ty, nameMapInt[Node.getValue()]); ///???????
             }
             else if (Node.getKind() == Expression::ExpressionType::Number)
             {
@@ -286,17 +285,17 @@ namespace
             StringRef Var = I;
 
             // Create an alloca instruction to allocate memory for the variable.
-            nameMap[Var] = Builder.CreateAlloca(Int32Ty);
+            nameMapInt[Var] = Builder.CreateAlloca(Int32Ty);
 
             // Store the initial value (if any) in the variable's memory location.
             if (val != nullptr)
             {
-                Builder.CreateStore(val, nameMap[Var]);
+                Builder.CreateStore(val, nameMapInt[Var]);
             }
             else
             {
                 Value* Zero = ConstantInt::get(Type::getInt32Ty(M->getContext()), 0);
-                Builder.CreateStore(Zero, nameMap[Var]);
+                Builder.CreateStore(Zero, nameMapInt[Var]);
             }
             
         }
@@ -317,17 +316,17 @@ namespace
             StringRef Var = I;
 
             // Create an alloca instruction to allocate memory for the variable.
-            nameMap[Var] = Builder.CreateAlloca(Int32Ty);                               //befahmim
+            nameMapBool[Var] = Builder.CreateAlloca(Int32Ty);                               //befahmim
 
             // Store the initial value (if any) in the variable's memory location.
             if (val != nullptr)
             {
-                Builder.CreateStore(val, nameMap[Var]);
+                Builder.CreateStore(val, nameMapBool[Var]);
             }
             else
             {
                 Value* Zero = ConstantInt::get(Type::getInt32Ty(M->getContext()), 0);
-                Builder.CreateStore(Zero, nameMap[Var]);
+                Builder.CreateStore(Zero, nameMapBool[Var]);
             }
             
         }
@@ -342,7 +341,8 @@ namespace
             auto varName = Node.getLValue()->getValue();
 
             // Create a store instruction to assign the value to the variable.
-            Builder.CreateStore(val, nameMap[varName]);
+            Builder.CreateStore(val, nameMapInt[varName]);    ////???????
+            
 
         }
 
