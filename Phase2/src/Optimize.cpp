@@ -275,13 +275,13 @@ class OptVisitor : public ASTVisitor {
                 // Node.setLeft(F);
             }
 
-            // Final* r = (Final*)right;
-            // if (r->getKind() == Final::Ident && r->getVal() == "i"){
-            //     llvm::errs() << "i update " << nThItr << " " << itrStep << "\n";
-            //     BinaryOp::Operator Op = BinaryOp::Operator::Plus;
-            //     Expr* leftBOp = right;
-            //     Expr* rightBOp = new Final(Final::Number, intToStr(nThItr*itrStep));
-            //     Expr* newRight = new BinaryOp(Op, leftBOp, rightBOp);
+            Final* r = (Final*)right;
+            if (r->getKind() == Final::Ident && r->getVal() == "i"){
+                llvm::errs() << "i update " << nThItr << " " << itrStep << "\n";
+                BinaryOp::Operator Op = BinaryOp::Operator::Plus;
+                Expr* leftBOp = right;
+                Expr* rightBOp = new Final(Final::Number, intToStr(nThItr*itrStep));
+                Expr* newRight = new BinaryOp(Op, leftBOp, rightBOp);
                 //Node.setRight(newRight);
             }
         }
